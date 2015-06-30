@@ -17,11 +17,11 @@ func New(AWSID, AWSKEY string) *ses.SES {
 }
 
 // Message to render a ses.SendEmailInput
-func Message(ToUsers []*mail.Address, Sender *mail.Address, Subject, Content string) *ses.SendEmailInput {
-	var toUsers []*string
+func Message(ToUsers []*mail.Address, Sender *mail.Address,
+	Subject, Content string) *ses.SendEmailInput {
+
 	var mailCharset = aws.String("UTF-8")
-	var mailContent = aws.String(Content)
-	var mailSubject = aws.String(Subject)
+	var toUsers []*string
 
 	toUsers = make([]*string, len(ToUsers))
 	for i, v := range ToUsers {
@@ -36,12 +36,12 @@ func Message(ToUsers []*mail.Address, Sender *mail.Address, Subject, Content str
 			Body: &ses.Body{
 				HTML: &ses.Content{
 					Charset: mailCharset,
-					Data:    mailContent,
+					Data:    aws.String(Content),
 				},
 			},
 			Subject: &ses.Content{
 				Charset: mailCharset,
-				Data:    mailSubject,
+				Data:    aws.String(Subject),
 			},
 		},
 		Source: aws.String(Sender.String()),
