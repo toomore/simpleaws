@@ -3,7 +3,7 @@ simpleaws
 
 [![GoDoc](https://godoc.org/github.com/toomore/simpleaws?status.svg)](https://godoc.org/github.com/toomore/simpleaws) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/toomore/simpleaws/master/LICENSE.md)
 
-Make aws/aws-sdk-go to be more easy to use.
+Make [aws/aws-sdk-go](https://github.com/aws/aws-sdk-go) to be more easy to use.
 
 Simple for ...
 ---------------
