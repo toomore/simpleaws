@@ -1,3 +1,4 @@
+// ses - simple to send mails.
 package ses
 
 import (
@@ -17,8 +18,8 @@ func New(AWSID, AWSKEY string) *ses.SES {
 }
 
 // Message to render a ses.SendEmailInput
-func Message(ToUsers []*mail.Address, Sender *mail.Address,
-	Subject, Content string) *ses.SendEmailInput {
+func Message(ToUsers []*mail.Address, Sender *mail.Address, Subject,
+	Content string) *ses.SendEmailInput {
 
 	var mailCharset = aws.String("UTF-8")
 	var toUsers []*string
