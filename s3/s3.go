@@ -1,3 +1,4 @@
+// Package s3 - simple for s3.
 package s3
 
 import (
@@ -8,11 +9,13 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3"
 )
 
+// S3 struct.
 type S3 struct {
 	bucket   *string
 	s3bucket *s3.S3
 }
 
+// Get to get a object from s3.
 func (s S3) Get(Key string) (*s3.GetObjectOutput, error) {
 	return s.s3bucket.GetObject(&s3.GetObjectInput{
 		Bucket: s.bucket,
@@ -20,6 +23,7 @@ func (s S3) Get(Key string) (*s3.GetObjectOutput, error) {
 	})
 }
 
+// Put to put a object into s3.
 func (s S3) Put(Key string, Body io.ReadSeeker) (*s3.PutObjectOutput, error) {
 	return s.s3bucket.PutObject(&s3.PutObjectInput{
 		Bucket: s.bucket,

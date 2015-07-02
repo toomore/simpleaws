@@ -1,4 +1,4 @@
-// ses - simple to send mails.
+// Package ses - simple to send mails.
 package ses
 
 import (
