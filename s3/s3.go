@@ -8,11 +8,18 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3"
 )
 
-func NewObject(Bucket, Key string, Body io.ReadSeeker) *s3.PutObjectInput {
+func NewPutObject(Bucket, Key string, Body io.ReadSeeker) *s3.PutObjectInput {
 	return &s3.PutObjectInput{
 		Bucket: aws.String(Bucket),
 		Key:    aws.String(Key),
 		Body:   Body,
+	}
+}
+
+func NewGetObject(Bucket, Key string) *s3.GetObjectInput {
+	return &s3.GetObjectInput{
+		Bucket: aws.String(Bucket),
+		Key:    aws.String(Key),
 	}
 }
 
