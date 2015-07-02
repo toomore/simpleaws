@@ -1,3 +1,4 @@
+// Package sqs - simple for sqs.
 package sqs
 
 import (
@@ -6,11 +7,13 @@ import (
 	"github.com/aws/aws-sdk-go/service/sqs"
 )
 
+// SQS struct
 type SQS struct {
 	url *string
 	sqs *sqs.SQS
 }
 
+// Send to send a queue message.
 func (s SQS) Send(Body string) (*sqs.SendMessageOutput, error) {
 	return s.sqs.SendMessage(&sqs.SendMessageInput{
 		MessageBody: aws.String(Body),
@@ -18,6 +21,7 @@ func (s SQS) Send(Body string) (*sqs.SendMessageOutput, error) {
 	})
 }
 
+// Receive to receive a queue message.
 func (s SQS) Receive(Visibility int64) (*sqs.ReceiveMessageOutput, error) {
 	return s.sqs.ReceiveMessage(&sqs.ReceiveMessageInput{
 		MaxNumberOfMessages: aws.Long(10),
@@ -26,6 +30,7 @@ func (s SQS) Receive(Visibility int64) (*sqs.ReceiveMessageOutput, error) {
 	})
 }
 
+// Delete to delete a queue message.
 func (s SQS) Delete(ReceiptHandle *string) (*sqs.DeleteMessageOutput, error) {
 	return s.sqs.DeleteMessage(&sqs.DeleteMessageInput{
 		QueueURL:      s.url,

@@ -10,6 +10,7 @@ Simple for ...
 
 1. SES
 2. S3
+3. SQS
 
 License
 --------

@@ -1,4 +1,4 @@
-// Package ses - simple to send mails.
+// Package ses - simple for ses.
 package ses
 
 import (
@@ -9,7 +9,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/ses"
 )
 
-// New to new a ses.SES
+// New to new a ses
 func New(AWSID, AWSKEY string) *ses.SES {
 	var config = aws.DefaultConfig
 	config.Region = "us-east-1"
