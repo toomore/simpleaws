@@ -29,3 +29,7 @@ func TestDelete(t *testing.T) {
 		}
 	}
 }
+
+func TestSendBatch(t *testing.T) {
+	t.Log(sqsqueue.SendBatch([]string{"aa_1", "bb_2", "cc_3", "aa_4", "bb_5", "cc_6", "aa_7", "bb_8", "cc_9", "aa_10", "bb_11", "cc_12"}))
+}

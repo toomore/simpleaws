@@ -38,6 +38,22 @@ func (s SQS) Delete(ReceiptHandle *string) (*sqs.DeleteMessageOutput, error) {
 	})
 }
 
+func (s SQS) SendBatch(Bodies []string) (*sqs.SendMessageBatchOutput, error) {
+	var entries []*sqs.SendMessageBatchRequestEntry
+	entries = make([]*sqs.SendMessageBatchRequestEntry, len(Bodies))
+
+	for i, body := range Bodies {
+		entries[i] = &sqs.SendMessageBatchRequestEntry{
+			ID:          aws.String(string(97 + i)),
+			MessageBody: aws.String(body),
+		}
+	}
+	return s.sqs.SendMessageBatch(&sqs.SendMessageBatchInput{
+		Entries:  entries,
+		QueueURL: s.url,
+	})
+}
+
 // New to new a sqs.
 func New(AWSID, AWSKEY, Region, URL string) *SQS {
 	var config = aws.DefaultConfig
