@@ -20,3 +20,12 @@ func TestReceive(t *testing.T) {
 		}
 	}
 }
+
+func TestDelete(t *testing.T) {
+	if rece, err := sqsqueue.Receive(30); err == nil {
+		for i, msg := range rece.Messages {
+			t.Logf("[%d] %s [%s]", i, *msg.MessageID, *msg.ReceiptHandle)
+			t.Log(sqsqueue.Delete(msg.ReceiptHandle))
+		}
+	}
+}

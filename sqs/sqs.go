@@ -26,7 +26,14 @@ func (s SQS) Receive(Visibility int64) (*sqs.ReceiveMessageOutput, error) {
 	})
 }
 
-// New to new a ses.S3
+func (s SQS) Delete(ReceiptHandle *string) (*sqs.DeleteMessageOutput, error) {
+	return s.sqs.DeleteMessage(&sqs.DeleteMessageInput{
+		QueueURL:      s.url,
+		ReceiptHandle: ReceiptHandle,
+	})
+}
+
+// New to new a sqs.
 func New(AWSID, AWSKEY, Region, URL string) *SQS {
 	var config = aws.DefaultConfig
 	config.Region = Region
