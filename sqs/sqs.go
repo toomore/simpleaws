@@ -18,6 +18,14 @@ func (s SQS) Send(Body string) (*sqs.SendMessageOutput, error) {
 	})
 }
 
+func (s SQS) Receive(Visibility int64) (*sqs.ReceiveMessageOutput, error) {
+	return s.sqs.ReceiveMessage(&sqs.ReceiveMessageInput{
+		MaxNumberOfMessages: aws.Long(10),
+		QueueURL:            s.url,
+		VisibilityTimeout:   aws.Long(Visibility),
+	})
+}
+
 // New to new a ses.S3
 func New(AWSID, AWSKEY, Region, URL string) *SQS {
 	var config = aws.DefaultConfig
