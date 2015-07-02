@@ -1,17 +1,19 @@
 package s3
 
 import (
-	"bytes"
+	"io"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/service/s3"
 )
 
-var object = &s3.PutObjectInput{
-	Bucket: aws.String("toomore-aet"),
-	Key:    aws.String("simples3-test.txt"),
-	Body:   bytes.NewReader([]byte("This is test for simples3.")),
+func NewObject(Bucket, Key string, Body io.ReadSeeker) *s3.PutObjectInput {
+	return &s3.PutObjectInput{
+		Bucket: aws.String(Bucket),
+		Key:    aws.String(Key),
+		Body:   Body,
+	}
 }
 
 // New to new a ses.SES
