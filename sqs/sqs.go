@@ -78,8 +78,9 @@ func (s SQS) SendBatchList(Bodies []string) []*Batch {
 	do = func(Bodies []string) {
 		defer wg.Done()
 		runtime.Gosched()
-		batchresult, err := s.SendBatch(Bodies)
-		result <- &Batch{Output: batchresult, Error: err}
+		var b = &Batch{}
+		b.Output, b.Error = s.SendBatch(Bodies)
+		result <- b
 	}
 
 	wg.Add(times)
