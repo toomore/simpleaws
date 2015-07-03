@@ -9,6 +9,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/ses"
 )
 
+// SES struct
 type SES struct {
 	ses    *ses.SES
 	Sender *mail.Address
@@ -25,6 +26,7 @@ func New(AWSID, AWSKEY, Region string, Sender *mail.Address) *SES {
 	}
 }
 
+// Send to send mail.
 func (s SES) Send(ToUsers []*mail.Address, Subject,
 	Content string) (*ses.SendEmailOutput, error) {
 	return s.ses.SendEmail(Message(ToUsers, s.Sender, Subject, Content))
