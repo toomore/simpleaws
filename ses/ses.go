@@ -9,12 +9,25 @@ import (
 	"github.com/aws/aws-sdk-go/service/ses"
 )
 
+type SES struct {
+	ses    *ses.SES
+	Sender *mail.Address
+}
+
 // New to new a ses
-func New(AWSID, AWSKEY string) *ses.SES {
+func New(AWSID, AWSKEY, Region string, Sender *mail.Address) *SES {
 	var config = aws.DefaultConfig
-	config.Region = "us-east-1"
+	config.Region = Region
 	config.Credentials = credentials.NewStaticCredentials(AWSID, AWSKEY, "")
-	return ses.New(config)
+	return &SES{
+		ses:    ses.New(config),
+		Sender: Sender,
+	}
+}
+
+func (s SES) Send(ToUsers []*mail.Address, Subject,
+	Content string) (*ses.SendEmailOutput, error) {
+	return s.ses.SendEmail(Message(ToUsers, s.Sender, Subject, Content))
 }
 
 // Message to render a ses.SendEmailInput

@@ -17,8 +17,7 @@ var sender = &mail.Address{
 }
 
 func TestNew(t *testing.T) {
-	ses := New(os.Getenv("AWSID"), os.Getenv("AWSKEY"))
-	msg := Message([]*mail.Address{user}, sender, "This is send from SimpleSES.", "<b>Hello Toomore~.</b>")
-	result, err := ses.SendEmail(msg)
+	ses := New(os.Getenv("AWSID"), os.Getenv("AWSKEY"), "us-east-1", sender)
+	result, err := ses.Send([]*mail.Address{user}, "This is send from SimpleSES.", "<b>Hello Toomore~.</b>")
 	t.Logf("%+v [Error: %s]\n", result, err)
 }
