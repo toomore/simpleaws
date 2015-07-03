@@ -2,6 +2,9 @@
 package sqs
 
 import (
+	"runtime"
+	"sync"
+
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/service/sqs"
@@ -52,6 +55,56 @@ func (s SQS) SendBatch(Bodies []string) (*sqs.SendMessageBatchOutput, error) {
 		Entries:  entries,
 		QueueURL: s.url,
 	})
+}
+
+type Batch struct {
+	Output *sqs.SendMessageBatchOutput
+	Error  error
+}
+
+func (s SQS) SendBatchList(Bodies []string) []*Batch {
+	var (
+		BodiesLen   = len(Bodies)
+		maxlen      = 10
+		times       = BodiesLen / maxlen
+		more        = BodiesLen % maxlen
+		wg          sync.WaitGroup
+		result      chan *Batch
+		do          func([]string)
+		BatchOutput []*Batch
+	)
+
+	result = make(chan *Batch)
+	do = func(Bodies []string) {
+		defer wg.Done()
+		runtime.Gosched()
+		batchresult, err := s.SendBatch(Bodies)
+		result <- &Batch{Output: batchresult, Error: err}
+	}
+
+	wg.Add(times)
+
+	if more > 0 {
+		wg.Add(1)
+		go do(Bodies[maxlen*times : maxlen*times+more])
+	}
+	for i := 0; i < times; i++ {
+		go do(Bodies[maxlen*i : maxlen*(i+1)])
+	}
+
+	BatchOutput = make([]*Batch, 0)
+	go func() {
+		for {
+			select {
+			case v, ok := <-result:
+				if ok {
+					BatchOutput = append(BatchOutput, v)
+				}
+			}
+		}
+	}()
+	wg.Wait()
+	return BatchOutput
 }
 
 // New to new a sqs.
