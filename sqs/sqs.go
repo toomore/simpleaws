@@ -122,3 +122,7 @@ func New(AWSID, AWSKEY, Region, URL string) *SQS {
 		sqs: sqs.New(config),
 	}
 }
+
+func init() {
+	runtime.GOMAXPROCS(runtime.NumCPU())
+}
