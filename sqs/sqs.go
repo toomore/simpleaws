@@ -8,6 +8,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/service/sqs"
+	"github.com/toomore/simpleaws/utils"
 )
 
 // SQS struct
@@ -19,7 +20,7 @@ type SQS struct {
 // Send to send a queue message.
 func (s SQS) Send(Body string) (*sqs.SendMessageOutput, error) {
 	return s.sqs.SendMessage(&sqs.SendMessageInput{
-		MessageBody: aws.String(Body),
+		MessageBody: aws.String(string(utils.Base64Encode([]byte(Body)))),
 		QueueURL:    s.url,
 	})
 }
@@ -49,7 +50,7 @@ func (s SQS) SendBatch(Bodies []string) (*sqs.SendMessageBatchOutput, error) {
 	for i, body := range Bodies {
 		entries[i] = &sqs.SendMessageBatchRequestEntry{
 			ID:          aws.String(string(97 + i)),
-			MessageBody: aws.String(body),
+			MessageBody: aws.String(string(utils.Base64Encode([]byte(body)))),
 		}
 	}
 	return s.sqs.SendMessageBatch(&sqs.SendMessageBatchInput{

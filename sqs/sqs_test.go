@@ -2,8 +2,11 @@ package sqs
 
 import (
 	"fmt"
+	"net/url"
 	"os"
 	"testing"
+
+	"github.com/toomore/simpleaws/utils"
 )
 
 var URL = "https://sqs.ap-northeast-1.amazonaws.com/271756324461/test_toomore"
@@ -36,4 +39,20 @@ func TestSendBatch(t *testing.T) {
 
 func TestSendBatchList(t *testing.T) {
 	sqsqueue.SendBatchList([]string{"aa_1", "bb_2", "cc_3", "aa_4", "bb_5", "cc_6", "aa_7", "bb_8", "cc_9", "aa_10", "bb_11", "cc_12"})
+}
+
+func TestSendValuesData(t *testing.T) {
+	m := map[string]string{"name": "Toomore", "age": "30"}
+	vs := url.Values{}
+	for k, v := range m {
+		vs.Set(k, v)
+	}
+	t.Log(vs.Encode())
+	sqsqueue.Send(vs.Encode())
+	if resp, err := sqsqueue.Receive(10); err == nil {
+		for _, msg := range resp.Messages {
+			body, _ := utils.Base64Decode([]byte(*msg.Body))
+			t.Log(url.ParseQuery(string(body)))
+		}
+	}
 }
