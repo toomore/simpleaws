@@ -56,3 +56,7 @@ func TestSendValuesData(t *testing.T) {
 		}
 	}
 }
+
+func TestPurgeQueue(t *testing.T) {
+	t.Log(sqsqueue.PurgeQueue())
+}

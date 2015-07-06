@@ -112,6 +112,13 @@ func (s SQS) SendBatch(Bodies []string) []*BatchOutput {
 	return batchOutput
 }
 
+// PurgeQueue to purge queue all messages.
+func (s SQS) PurgeQueue() (*sqs.PurgeQueueOutput, error) {
+	return s.sqs.PurgeQueue(&sqs.PurgeQueueInput{
+		QueueURL: s.url,
+	})
+}
+
 // New to new a sqs.
 func New(AWSID, AWSKEY, Region, URL string) *SQS {
 	var config = aws.DefaultConfig
