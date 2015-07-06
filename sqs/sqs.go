@@ -42,8 +42,8 @@ func (s SQS) Delete(ReceiptHandle *string) (*sqs.DeleteMessageOutput, error) {
 	})
 }
 
-// SendBatch to send batch messages.
-func (s SQS) SendBatch(Bodies []string) (*sqs.SendMessageBatchOutput, error) {
+// sendBatch to send batch messages.
+func (s SQS) sendBatch(Bodies []string) (*sqs.SendMessageBatchOutput, error) {
 	var entries []*sqs.SendMessageBatchRequestEntry
 	entries = make([]*sqs.SendMessageBatchRequestEntry, len(Bodies))
 
@@ -65,8 +65,8 @@ type BatchOutput struct {
 	Error  error
 }
 
-// SendBatchList to split Bodies into batch messages and send.
-func (s SQS) SendBatchList(Bodies []string) []*BatchOutput {
+// SendBatch to split Bodies into batch messages and send.
+func (s SQS) SendBatch(Bodies []string) []*BatchOutput {
 	var (
 		BodiesLen   = len(Bodies)
 		maxlen      = 10
@@ -83,7 +83,7 @@ func (s SQS) SendBatchList(Bodies []string) []*BatchOutput {
 		defer wg.Done()
 		runtime.Gosched()
 		var b = &BatchOutput{}
-		b.Output, b.Error = s.SendBatch(Bodies)
+		b.Output, b.Error = s.sendBatch(Bodies)
 		result <- b
 	}
 
